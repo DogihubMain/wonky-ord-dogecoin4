@@ -7,7 +7,7 @@ pub(crate) struct OutputHtml {
   pub(crate) chain: Chain,
   pub(crate) output: TxOut,
   pub(crate) inscriptions: Vec<InscriptionId>,
-  pub(crate) dunes: Vec<(SpacedDune, Pile)>,
+  // pub(crate) dunes: Vec<(SpacedDune, Pile)>,
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
@@ -16,12 +16,8 @@ pub(crate) struct AddressOutputJson {
 }
 
 impl AddressOutputJson {
-  pub fn new(
-    outputs: Vec<OutPoint>,
-  ) -> Self {
-    Self {
-      outpoint: outputs
-    }
+  pub fn new(outputs: Vec<OutPoint>) -> Self {
+    Self { outpoint: outputs }
   }
 }
 
@@ -51,9 +47,9 @@ impl OutputJson {
   ) -> Self {
     Self {
       address: chain
-          .address_from_script(&output.script_pubkey)
-          .ok()
-          .map(|address| address.to_string()),
+        .address_from_script(&output.script_pubkey)
+        .ok()
+        .map(|address| address.to_string()),
       inscriptions,
       dunes,
       script_pubkey: output.script_pubkey.asm(),
@@ -82,7 +78,7 @@ mod tests {
           value: 3,
           script_pubkey: Script::new_p2pkh(&PubkeyHash::all_zeros()),
         },
-        dunes: Vec::new(),
+        // dunes: Vec::new(),
       },
       "
         <h1>Output <span class=monospace>1{64}:1</span></h1>
@@ -114,7 +110,7 @@ mod tests {
           value: 1,
           script_pubkey: script::Builder::new().push_int(0).into_script(),
         },
-        dunes: Vec::new(),
+        // dunes: Vec::new(),
       },
       "
         <h1>Output <span class=monospace>1{64}:1</span></h1>
@@ -141,7 +137,7 @@ mod tests {
           value: 3,
           script_pubkey: Script::new_p2pkh(&PubkeyHash::all_zeros()),
         },
-        dunes: Vec::new(),
+        // dunes: Vec::new(),
       }
       .to_string(),
       "
@@ -169,7 +165,7 @@ mod tests {
           value: 3,
           script_pubkey: Script::new_p2pkh(&PubkeyHash::all_zeros()),
         },
-        dunes: Vec::new(),
+        // dunes: Vec::new(),
       },
       "
         <h1>Output <span class=monospace>1{64}:1</span></h1>
@@ -197,14 +193,14 @@ mod tests {
           value: 3,
           script_pubkey: Script::new_p2pkh(&PubkeyHash::all_zeros()),
         },
-        dunes: vec![(
-          Dune(0),
-          Pile {
-            amount: 11,
-            divisibility: 1,
-            symbol: None,
-          }
-        )],
+        // dunes: vec![(
+        //   Dune(0),
+        //   Pile {
+        //     amount: 11,
+        //     divisibility: 1,
+        //     symbol: None,
+        //   }
+        // )],
       },
       "
         <h1>Output <span class=monospace>1{64}:1</span></h1>

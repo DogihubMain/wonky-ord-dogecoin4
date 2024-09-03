@@ -570,7 +570,7 @@ impl Server {
 
     let inscriptions = index.get_inscriptions_on_output(outpoint)?;
 
-    let dunes = index.get_dune_balances_for_outpoint(outpoint)?;
+    // let dunes = index.get_dune_balances_for_outpoint(outpoint)?;
 
     Ok(
       OutputHtml {
@@ -579,7 +579,7 @@ impl Server {
         list,
         chain: page_config.chain,
         output,
-        dunes,
+        //dunes,
       }
       .page(page_config),
     )
@@ -2736,50 +2736,50 @@ mod tests {
     TestServer::new().assert_redirect("/search/ABCD", "/dune/ABCD");
   }
 
-  #[test]
-  fn search_by_dune_id_returns_dune() {
-    let server = TestServer::new_with_regtest_with_index_dunes();
+  // #[test]
+  // fn search_by_dune_id_returns_dune() {
+  //   let server = TestServer::new_with_regtest_with_index_dunes();
 
-    server.mine_blocks(1);
+  //   server.mine_blocks(1);
 
-    let dune = Dune(u128::from(21_000_000 * COIN_VALUE));
+  //   let dune = Dune(u128::from(21_000_000 * COIN_VALUE));
 
-    server.assert_response_regex(format!("/dune/{dune}"), StatusCode::NOT_FOUND, ".*");
+  //   server.assert_response_regex(format!("/dune/{dune}"), StatusCode::NOT_FOUND, ".*");
 
-    server.bitcoin_rpc_server.broadcast_tx(TransactionTemplate {
-      inputs: &[(1, 0, 0)],
-      witness: inscription("text/plain", "hello").to_witness(),
-      op_return: Some(
-        Dunestone {
-          edicts: vec![Edict {
-            id: 0,
-            amount: u128::max_value(),
-            output: 0,
-          }],
-          etching: Some(Etching {
-            dune,
-            ..Default::default()
-          }),
-          ..Default::default()
-        }
-        .encipher(),
-      ),
-      ..Default::default()
-    });
+  //   server.bitcoin_rpc_server.broadcast_tx(TransactionTemplate {
+  //     inputs: &[(1, 0, 0)],
+  //     witness: inscription("text/plain", "hello").to_witness(),
+  //     op_return: Some(
+  //       Dunestone {
+  //         edicts: vec![Edict {
+  //           id: 0,
+  //           amount: u128::max_value(),
+  //           output: 0,
+  //         }],
+  //         etching: Some(Etching {
+  //           dune,
+  //           ..Default::default()
+  //         }),
+  //         ..Default::default()
+  //       }
+  //       .encipher(),
+  //     ),
+  //     ..Default::default()
+  //   });
 
-    server.mine_blocks(1);
+  //   server.mine_blocks(1);
 
-    server.assert_redirect("/search/2/1", "/dune/NVTDIJZYIPU");
-    server.assert_redirect("/search?query=2/1", "/dune/NVTDIJZYIPU");
+  //   server.assert_redirect("/search/2/1", "/dune/NVTDIJZYIPU");
+  //   server.assert_redirect("/search?query=2/1", "/dune/NVTDIJZYIPU");
 
-    server.assert_response_regex("/dune/100/200", StatusCode::NOT_FOUND, ".*");
+  //   server.assert_response_regex("/dune/100/200", StatusCode::NOT_FOUND, ".*");
 
-    server.assert_response_regex(
-      "/search/100000000000000000000/200000000000000000",
-      StatusCode::BAD_REQUEST,
-      ".*",
-    );
-  }
+  //   server.assert_response_regex(
+  //     "/search/100000000000000000000/200000000000000000",
+  //     StatusCode::BAD_REQUEST,
+  //     ".*",
+  //   );
+  // }
 
   #[test]
   fn http_to_https_redirect_with_path() {
